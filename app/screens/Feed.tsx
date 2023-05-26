@@ -3,25 +3,25 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Button, TextInput, TouchableOpacity } from 'react-native';
 import { FIRESTORE_DB } from '../../firebaseConfig';
 
-const lista = ({ navigation }: any) => {
+const Feed = ({ navigation }: any) => {
 
     
-    const [tarefas, setTarefas] = useState<any[]>([]);
+    const [noticias, setNoticias] = useState<any[]>([]);
 
     useEffect(() => {
-        const TarefasRef = collection(FIRESTORE_DB, 'Tarefas');
+        const NoticiasRef = collection(FIRESTORE_DB, 'Noticias');
 
-        const subscriber = onSnapshot(TarefasRef, {
+        const subscriber = onSnapshot(NoticiasRef, {
             next: (snapshot) => {
-                const tarefas: any[] = [];
+                const noticias: any[] = [];
                 snapshot.docs.forEach(doc => {
-                    tarefas.push({
+                    noticias.push({
                         id: doc.id,
                         ...doc.data(),
 
                     })
                 })
-                setTarefas(tarefas);
+                setNoticias(noticias);
             }
         })
         return () => subscriber();
@@ -31,30 +31,41 @@ const lista = ({ navigation }: any) => {
 
     const ExcluirElemento = async (id:any) => {
         try {
-            const colecao = collection(FIRESTORE_DB, "Tarefas");
+            const colecao = collection(FIRESTORE_DB, "Noticias");
             const elemento = doc(colecao, id);
             await deleteDoc(elemento);
-            alert("Elemento excluído!");
+            alert("Noticia excluída!");
             
         } catch (error) {
             alert("Falha ao excluir! " + error);
         }
     }
+
+    const AlterarElemento = (id: any) => {
+        navigation.navigate('Alterar', {id});
+    }
+
     return (
         <View>
             
              <Button
-                title="cadastro de tarefas"
+                title="Publicar nova noticia"
                 onPress={() => navigation.navigate('Cadastro')}
             />
            
+           
             
             <View>
-                {tarefas.map((tarefa) => (
+                {noticias.map((noticia) => (
                     <>
-                    <Text key={tarefa.id}>{tarefa.title}</Text>
-                    <TouchableOpacity onPress= {() => ExcluirElemento(tarefa.id)}>
+                    <Text key={noticia.id}>{noticia.title}</Text>
+                    <Text key={noticia.id}>{noticia.noticia}</Text>
+                    <Text key={noticia.id}>{noticia.data}</Text>
+                    <TouchableOpacity onPress= {() => ExcluirElemento(noticia.id)}>
                         <Text>Excluir</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress= {() => AlterarElemento(noticia.id)}>
+                        <Text>Alterar</Text>
                     </TouchableOpacity>
                     </>
                 ))}
@@ -64,4 +75,4 @@ const lista = ({ navigation }: any) => {
     );
 }
 
-export default lista;
+export default Feed;

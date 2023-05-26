@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, Button} from 'react-native';
 
-const detalhes = () => {
+const Detalhes = () => {
     return (
         <View>
             <Text>Detalhes :)</Text>
@@ -9,4 +9,4 @@ const detalhes = () => {
     );
 }
 
-export default detalhes;
+export default Detalhes;
