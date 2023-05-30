@@ -46,15 +46,7 @@ const Feed = ({ navigation }: any) => {
     }
 
     return (
-        <View>
-            
-             <Button
-                title="Publicar nova noticia"
-                onPress={() => navigation.navigate('Cadastro')}
-            />
-           
-           
-            
+        <View>            
             <View>
                 {noticias.map((noticia) => (
                     <>
