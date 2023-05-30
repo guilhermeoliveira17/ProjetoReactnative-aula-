@@ -22,4 +22,3 @@ const firebaseConfig = {
 export const FIREBASE_APP = initializeApp(firebaseConfig);
 export const FIRESTORE_DB = getFirestore(FIREBASE_APP);
 export const STORAGE = getStorage(FIREBASE_APP);
-const analytics = getAnalytics(FIREBASE_APP);

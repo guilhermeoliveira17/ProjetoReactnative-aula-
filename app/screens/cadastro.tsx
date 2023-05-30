@@ -6,13 +6,12 @@ import * as ImagePicker from 'expo-image-picker';
 import { ref, getDownloadURL, uploadBytes } from 'firebase/storage';
 
 
-const Cadastro = ({ navigation }: any) => {
+const Cadastro = () => {
 
     const [titulo, setTitulo] = useState('');
     const [noticia, setNoticia] = useState('');
     const [data, setData] = useState('');
     const [imagem, setImagem] = useState('');
-    const [uploanding, setUploading] = useState(false);
 
     const selectImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -30,54 +29,66 @@ const Cadastro = ({ navigation }: any) => {
     
 
     const addNoticia = async () => {
-        setUploading(true);
-        const refe = ref(STORAGE, 'images/' + new Date().getTime());
-        const response = await fetch(imagem);
-        const blob = await response.blob();
-
-        await uploadBytes(refe, blob);
-        const url = await getDownloadURL(refe);
+        
+        async function uploadImage(imageFile: File) {
+            const storageRef = ref(STORAGE, 'images/' + new Date().getTime());
+          
+            try {
+              await uploadBytes(storageRef, imageFile);
+          
+              const downloadURL = await getDownloadURL(storageRef);
+          
+              console.log('URL de download:', downloadURL);
+            } catch (error) {
+              console.error('Erro ao fazer o upload da imagem:', error);
+            }
+          }
+          
+          const imageFile = imagem as unknown as File
+          uploadImage(imageFile);
+       
 
         try {
+            const doc = addDoc(collection(FIRESTORE_DB, 'Noticias'), { title: titulo, noticia: noticia, data: data, imagem: imagem });
+            setNoticia('');
+            setTitulo('');
+            setData('');
+            alert("Notícia publicada com sucesso!");
             
         } catch (error) {
             alert(error + "Erro ao publicar a notícia")
         }
-        const doc = addDoc(collection(FIRESTORE_DB, 'Noticias'), { title: titulo, noticia: noticia, data: data, imagem: imagem });
-        setNoticia('');
-        setTitulo('');
-        setData('');
-        alert("Notícia publicada com sucesso!");
+        
     }
     return (
         <View style= {styles.container}>
 
             <TextInput style = {styles.title}
-                placeholder="Informe o título da noticia"
+                placeholder="Informe o título da notícia"
                 onChangeText={(t: string) => setTitulo(t)}
                 value={titulo}
             />
 
-            <TextInput
-                placeholder="Detalhes da noticia"
+            <TextInput style = {styles.notices}
+                placeholder="Detalhes da notícia"
                 onChangeText={(t: string) => setNoticia(t)}
                 value={noticia}
             />
 
-            <TextInput
+            <TextInput style = {styles.date}
                 placeholder="Data do ocorrido"
                 onChangeText={(t: string) => setData(t)}
                 value={data}
             />
 
-            <TouchableOpacity onPress={selectImage}>
-                <Text>Escolher imagem</Text>
+            <TouchableOpacity style = {styles.btnImg} onPress={selectImage}>
+                <Text style= {styles.txtImg}>Escolher imagem</Text>
             </TouchableOpacity>
 
 
             {titulo != '' && noticia != '' && data != '' && imagem !='' &&
-            <TouchableOpacity onPress={addNoticia}>
-                <Text>Publicar notícia</Text>
+            <TouchableOpacity style = {styles.btnSend} onPress={addNoticia}>
+                <Text style = {styles.txtSend}>Publicar notícia</Text>
             </TouchableOpacity>
             
             }
@@ -106,10 +117,74 @@ const styles = StyleSheet.create({
         borderColor: '#27374D',
         borderStyle: 'solid',
         borderWidth: 2,
-        
-
+        textAlign: 'center',
+        fontWeight: 'bold',
+    },
+    notices: {
+        fontSize: 16,
+        backgroundColor: '#9DB2BF',
+        color: '#526D82',
+        borderRadius: 5,
+        padding: 5,
+        marginVertical: 15,
+        marginHorizontal: 15,
+        borderColor: '#27374D',
+        borderStyle: 'solid',
+        borderWidth: 2,
+        textAlign: 'center',
+        fontWeight: 'bold'
+    },
+    date: {
+        fontSize: 16,
+        backgroundColor: '#9DB2BF',
+        color: '#526D82',
+        padding: 5,
+        marginVertical: 15,
+        marginHorizontal: 15,
+        borderRadius: 5,
+        borderColor: '#27374D',
+        borderStyle: 'solid',
+        borderWidth: 2,
+        textAlign: 'center',
+        fontWeight: 'bold'
+    },
+    btnImg: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlign: 'center',
+        backgroundColor: '#27374D',
+        marginTop: 20,
+        padding: 10,
+        alignSelf: 'center',
+        width: 200,
+        borderRadius: 5,
+        borderWidth: 2,
+        borderColor: '#526D82',
+        borderStyle: 'solid',
+    },
+    txtImg: {
+        color: '#DDE6ED',
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
+    btnSend: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlign: 'center',
+        backgroundColor: '#27374D',
+        marginTop: 20,
+        padding: 10,
+        alignSelf: 'center',
+        width: 200,
+        borderRadius: 5,
+        borderWidth: 2,
+        borderColor: '#526D82',
+        borderStyle: 'solid',
+    },
+    txtSend: {
+        color: '#DDE6ED',
+        fontWeight: 'bold',
+        fontSize: 16,
     }
-
-
 
 });

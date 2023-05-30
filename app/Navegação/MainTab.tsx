@@ -2,6 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Cadastro from '../screens/Cadastro';
 import Feed from '../screens/Feed';
+import CarouselCards from '../screens/CarouselCards';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -32,7 +33,8 @@ export default () => (
     <Tab.Screen
       name="Publicar notícia"
       component={Cadastro}
-      
     />
+    
+
   </Tab.Navigator>
 );
