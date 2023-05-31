@@ -10,31 +10,48 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const Tab = createBottomTabNavigator();
 
-export default () => (
-  <Tab.Navigator screenOptions={({ route }) => ({
-    tabBarIcon: ({  color, size }) => {
+export default () => {
+  return (
+    <Tab.Navigator screenOptions={({ route }) => ({
+      tabBarIcon: ({ color, size }) => {
         let icon;
 
         if (route.name === 'Feed') {
-            icon = faHome;
+          icon = faHome;
         } else if (route.name === 'Publicar notícia') {
-            icon = faPlus;
+          icon = faPlus;
         }
 
         return icon ? <FontAwesomeIcon icon={icon} size={size} color={color} /> : null;
-    },
-})}>
-    <Tab.Screen
-      name="Feed"
-      component={Feed}
-      
-    />
+      },
+      headerStyle: {
+        backgroundColor: '#182747',
+      },
+      headerTitleStyle: {
+        color: '#D8D8D8',
+      },
+    })}
+      tabBarOptions={{
+        showLabel: false,
+        tabStyle: {
+          backgroundColor: '#182747'
+        },
+      }}
 
-    <Tab.Screen
-      name="Publicar notícia"
-      component={Cadastro}
-    />
-    
+    >
+      <Tab.Screen options={{
+          headerTitleAlign: 'center',
+        }}
+        name="Feed"
+        component={Feed} />
 
-  </Tab.Navigator>
-);
+      <Tab.Screen options={{
+          headerTitleAlign: 'center',
+        }}
+        name="Publicar notícia"
+        component={Cadastro} />
+
+
+    </Tab.Navigator>
+  );
+};

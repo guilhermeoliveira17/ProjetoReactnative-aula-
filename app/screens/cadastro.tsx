@@ -103,8 +103,7 @@ export default Cadastro;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#DDE6ED'
-
+        backgroundColor: '#182747',
     },
     title: {
         fontSize: 16,
@@ -158,7 +157,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         width: 200,
         borderRadius: 5,
-        borderWidth: 2,
+        borderWidth: 1,
         borderColor: '#526D82',
         borderStyle: 'solid',
     },
