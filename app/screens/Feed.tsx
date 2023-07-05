@@ -1,7 +1,9 @@
-import { addDoc, collection, deleteDoc, doc, onSnapshot } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, onSnapshot, orderBy, query } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { View, Text, Button, TextInput, TouchableOpacity, FlatList, Image, StyleSheet  } from 'react-native';
 import { FIRESTORE_DB } from '../../firebaseConfig';
+import LikeButton from '../components/LikeButton';
+
 
 const Feed = () => {
 
@@ -9,8 +11,8 @@ const Feed = () => {
 
     useEffect(() => {
         const NoticiasRef = collection(FIRESTORE_DB, 'Noticias');
-
-        const subscriber = onSnapshot(NoticiasRef, {
+        const order = query(NoticiasRef, orderBy('likes', 'desc'));
+        const subscriber = onSnapshot(order, {
             next: (snapshot) => {
                 const noticias: any[] = [];
                 snapshot.docs.forEach(doc => {
@@ -26,7 +28,6 @@ const Feed = () => {
         return () => subscriber();
     }, [])
 
-    
 
     return (
         <View style = {styles.container}>            
@@ -41,6 +42,8 @@ const Feed = () => {
                         </View>
                         <Text style = {styles.body}>{item.noticia}</Text>
                         <Text style = {styles.date}>{item.data}</Text>
+                        <LikeButton key={item.id} item={item}/>
+                        
                         <View style = {styles.separator}/>
                     </View>
 
@@ -48,7 +51,7 @@ const Feed = () => {
             />
         </View>
     );
-}
+}   
 
 export default Feed;
 
@@ -98,4 +101,4 @@ const styles = StyleSheet.create({
         borderBottomColor: "#FFF",
         borderBottomWidth: StyleSheet.hairlineWidth
       }
-})
+});
