@@ -2,17 +2,18 @@ import { addDoc, collection, deleteDoc, doc, onSnapshot, orderBy, query } from '
 import React, { useEffect, useState } from 'react';
 import { View, Text, Button, TextInput, TouchableOpacity, FlatList, Image, StyleSheet  } from 'react-native';
 import { FIRESTORE_DB } from '../../firebaseConfig';
-import LikeButton from '../components/LikeButton';
+import { useNavigation } from '@react-navigation/native';
 
 
-const Feed = () => {
 
+const Feed = ({ route }: any) => {
+    const navigation = useNavigation();
+    const userInfo = route.params.userInfo;
     const [noticias, setNoticias] = useState<any[]>([]);
 
     useEffect(() => {
         const NoticiasRef = collection(FIRESTORE_DB, 'Noticias');
-        const order = query(NoticiasRef, orderBy('likes', 'desc'));
-        const subscriber = onSnapshot(order, {
+        const subscriber = onSnapshot(NoticiasRef, {
             next: (snapshot) => {
                 const noticias: any[] = [];
                 snapshot.docs.forEach(doc => {
@@ -28,6 +29,20 @@ const Feed = () => {
         return () => subscriber();
     }, [])
 
+    const moveToAlter = async (id: any, userInfo: any) => {
+        navigation.navigate("Alterar", { id }, { userInfo })
+    }
+
+    const ExcluirDoc = async (id: any, imageUrl: any) => {
+        try {
+            const document = collection(FIRESTORE_DB, "Noticias")
+            const noticia = doc(document, id);
+            await deleteDoc(noticia);
+
+        } catch (error) {
+            alert("Erro ao excluir! " + error);
+        }
+    }
 
     return (
         <View style = {styles.container}>            
@@ -35,17 +50,25 @@ const Feed = () => {
                 
                 data = {noticias}
                 renderItem={({item}) => (
-                    <View>
-                        <Text style = {styles.title}>{item.title}</Text> 
+                    <><View>
+                        <Text style={styles.title}>{item.title}</Text>
                         <View>
-                            <Image style= {styles.img} source = {{uri: item.imagem }} resizeMode='cover'/>
+                            <Image style={styles.img} source={{ uri: item.imagem }} resizeMode='cover' />
                         </View>
-                        <Text style = {styles.body}>{item.noticia}</Text>
-                        <Text style = {styles.date}>{item.data}</Text>
-                        <LikeButton key={item.id} item={item}/>
-                        
-                        <View style = {styles.separator}/>
+                        <Text style={styles.body}>{item.noticia}</Text>
+                        <Text style={styles.date}>{item.data}</Text>
+
+                        <View style={styles.separator} />
                     </View>
+                        {item.fundador === userInfo?.email &&
+                            <><TouchableOpacity style={styles.editBtn} onPress={() => moveToAlter(item.id, userInfo)}>
+                                <Text style={styles.editTxt}>Editar</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.editBtn} onPress={() => ExcluirDoc(item.id, item.imageUrl)}>
+                                <Text style={styles.editTxt}>Excluir</Text>
+                            </TouchableOpacity></>
+                        }
+                       </>
 
                 )}
             />
@@ -95,6 +118,24 @@ const styles = StyleSheet.create({
         fontSize: 15,
         marginVertical: 10,
         color: '#647E68',
+    },
+    editBtn: {
+        justifyContent: 'flex-end',
+        textAlign: 'center',
+        backgroundColor: '#F8FDCF',
+        marginTop: 20,
+        marginHorizontal: 10,
+        padding: 10,
+        width: 70,
+        borderRadius: 3,
+        borderWidth: 3,
+        borderColor: '#E2F6CA',
+        borderStyle: 'solid', 
+    },
+    editTxt: {
+        color: '#000000',
+        fontWeight: 'bold',
+        fontSize: 12,
     },
     separator: {
         marginVertical: 20,

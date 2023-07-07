@@ -4,14 +4,17 @@ import { View, Text, Button, TextInput, TouchableOpacity, StyleSheet } from 'rea
 import { FIRESTORE_DB, STORAGE } from '../../firebaseConfig';
 import * as ImagePicker from 'expo-image-picker';
 import { ref, getDownloadURL, uploadBytes } from 'firebase/storage';
+import { useNavigation } from '@react-navigation/native';
 
 
-const Cadastro = () => {
+const Cadastro = ({route}: any) => {
 
     const [titulo, setTitulo] = useState('');
     const [noticia, setNoticia] = useState('');
     const [data, setData] = useState('');
     const [imagem, setImagem] = useState('');
+    const userInfo = route.params.userInfo;
+    const navigation = useNavigation()
 
     const selectImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -49,7 +52,7 @@ const Cadastro = () => {
        
 
         try {
-            const doc = addDoc(collection(FIRESTORE_DB, 'Noticias'), { title: titulo, noticia: noticia, data: data, imagem: imagem });
+            const doc = addDoc(collection(FIRESTORE_DB, 'Noticias'), { title: titulo, noticia: noticia, data: data, imagem: imagem, likes: 0, fundador: userInfo.email });
             setNoticia('');
             setTitulo('');
             setData('');

@@ -15,17 +15,29 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "runtimeVersion": {
+        "policy": "sdkVersion"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.fireapp"
+      "package": "com.anonymous.fireapp",
+      "runtimeVersion": "1.0.0"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "033efc24-a74b-47c0-aaee-42f6bf4cea54"
+      }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/033efc24-a74b-47c0-aaee-42f6bf4cea54"
     }
   }
 }
