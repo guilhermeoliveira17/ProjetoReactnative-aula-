@@ -15,7 +15,10 @@ export default function Login() {
         webClientId: "1086481132376-30n40b66pd98dhbskp6h86cu4k0lcmb7.apps.googleusercontent.com",
         expoClientId: "1086481132376-neig2b4g9ghq7fotns9ik1p02eh9f960.apps.googleusercontent.com"
 
-    }); 
+    },{
+        projectNameForProxy: "@guilhermeoliv/fireapp"
+    }
+    ); 
 
     React.useEffect(() => {
         SignWithGoogle();
@@ -56,7 +59,7 @@ export default function Login() {
     return (
         <View style={styles.container}>
             <Text style={styles.text}>Bem-vindo ao Folha de Rive</Text>
-            <TouchableOpacity onPress={() => promptAsync()} style={styles.btn}>
+            <TouchableOpacity onPress={() => promptAsync({projectNameForProxy: "@guilhermeoliv/fireapp"})} style={styles.btn}>
                 <Text style={styles.BtnTxt}>Login com o Google</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => AsyncStorage.removeItem("@user")} style={styles.btn}>

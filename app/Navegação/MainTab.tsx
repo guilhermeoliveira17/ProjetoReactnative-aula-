@@ -45,7 +45,7 @@ export default () => {
           }}
     >
         <Tab.Screen name="Feed" component={Feed}  initialParams={{userInfo: userInfo}} />
-        <Tab.Screen name="Cadastro" component={Cadastro} initialParams={{userInfo: userInfo}} />
+        <Tab.Screen name="Cadastro" component={Cadastro} initialParams={{userInfo: userInfo}}/>
     </Tab.Navigator>
     );
 }

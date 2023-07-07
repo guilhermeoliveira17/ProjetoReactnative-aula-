@@ -58,16 +58,20 @@ const Feed = ({ route }: any) => {
                         <Text style={styles.body}>{item.noticia}</Text>
                         <Text style={styles.date}>{item.data}</Text>
 
-                        <View style={styles.separator} />
-                    </View>
+                        <View style={styles.buttons}>
                         {item.fundador === userInfo?.email &&
-                            <><TouchableOpacity style={styles.editBtn} onPress={() => moveToAlter(item.id, userInfo)}>
+                            <><TouchableOpacity style={styles.btn} onPress={() => moveToAlter(item.id, userInfo)}>
                                 <Text style={styles.editTxt}>Editar</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.editBtn} onPress={() => ExcluirDoc(item.id, item.imageUrl)}>
+                            <TouchableOpacity style={styles.btn} onPress={() => ExcluirDoc(item.id, item.imageUrl)}>
                                 <Text style={styles.editTxt}>Excluir</Text>
                             </TouchableOpacity></>
+                        
                         }
+                        </View>
+                        <View style={styles.separator} />
+                    </View>
+                        
                        </>
 
                 )}
@@ -94,6 +98,10 @@ const styles = StyleSheet.create({
         color: '#D8D8D8',
         marginVertical: 30,
     },
+    buttons: {
+        flexDirection: 'row', 
+        justifyContent: 'center',
+    },
     body: {
         textAlign: 'center',
         justifyContent: 'center',
@@ -119,14 +127,13 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         color: '#647E68',
     },
-    editBtn: {
-        justifyContent: 'flex-end',
+    btn: {
         textAlign: 'center',
         backgroundColor: '#F8FDCF',
         marginTop: 20,
-        marginHorizontal: 10,
+        marginHorizontal: 120,
         padding: 10,
-        width: 70,
+        width: 60,
         borderRadius: 3,
         borderWidth: 3,
         borderColor: '#E2F6CA',
@@ -135,7 +142,8 @@ const styles = StyleSheet.create({
     editTxt: {
         color: '#000000',
         fontWeight: 'bold',
-        fontSize: 12,
+        fontSize: 11,
+        textAlign:'center'
     },
     separator: {
         marginVertical: 20,
